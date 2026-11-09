@@ -29,6 +29,47 @@ const App = () => {
     setTimeout(() => setAlerta(null), 4000);
   };
 
+  const validarMonto = (monto) => {
+    if (monto === '' || monto === null || monto === undefined) {
+      return { valido: false, mensaje: 'El monto es obligatorio.' };
+    }
+    const m = parseFloat(monto);
+    if (isNaN(m) || !Number.isFinite(m)) {
+      return { valido: false, mensaje: 'Ingrese un monto numérico válido (sin letras ni símbolos).' };
+    }
+    if (m <= 0) {
+      return { valido: false, mensaje: 'El monto debe ser mayor que 0.' };
+    }
+    if (m > 100000000) {
+      return { valido: false, mensaje: 'El monto excede el límite permitido.' };
+    }
+    return { valido: true, mensaje: '', monto: m };
+  };
+
+  const validarRetiro = (monto, saldo) => {
+    const v = validarMonto(monto);
+    if (!v.valido) return v;
+    if (v.monto > saldo) {
+      return { valido: false, mensaje: 'Saldo insuficiente para realizar el retiro.' };
+    }
+    return v;
+  };
+
+  const validarTransferencia = (monto, saldo, cuentaDestinoId, cuentaOrigenId) => {
+    const v = validarMonto(monto);
+    if (!v.valido) return v;
+    if (!cuentaDestinoId) {
+      return { valido: false, mensaje: 'Seleccione una cuenta destino.' };
+    }
+    if (cuentaDestinoId === cuentaOrigenId) {
+      return { valido: false, mensaje: 'La cuenta destino debe ser diferente a la origen.' };
+    }
+    if (v.monto > saldo) {
+      return { valido: false, mensaje: 'Saldo insuficiente en la cuenta origen.' };
+    }
+    return v;
+  };
+
   useEffect(() => {
     const cargarCuentas = async () => {
       try {
@@ -76,8 +117,14 @@ const App = () => {
 
   const handleDeposito = async (data) => {
     setLoadingOperacion(true);
+    const v = validarMonto(data.monto);
+    if (!v.valido) {
+      mostrarAlerta('error', v.mensaje);
+      setLoadingOperacion(false);
+      return;
+    }
     try {
-      await api.post('/cuenta/deposito', { cuentaId, monto: data.monto });
+      await api.post('/cuenta/deposito', { cuentaId, monto: v.monto });
       mostrarAlerta('exito', 'Depósito realizado correctamente');
       await recargarCuenta();
     } catch (error) {
@@ -89,8 +136,14 @@ const App = () => {
 
   const handleRetiro = async (data) => {
     setLoadingOperacion(true);
+    const v = validarRetiro(data.monto, cuenta?.saldo ?? 0);
+    if (!v.valido) {
+      mostrarAlerta('error', v.mensaje);
+      setLoadingOperacion(false);
+      return;
+    }
     try {
-      await api.post('/cuenta/retiro', { cuentaId, monto: data.monto });
+      await api.post('/cuenta/retiro', { cuentaId, monto: v.monto });
       mostrarAlerta('exito', 'Retiro realizado correctamente');
       await recargarCuenta();
     } catch (error) {
@@ -102,11 +155,17 @@ const App = () => {
 
   const handleTransferencia = async (data) => {
     setLoadingOperacion(true);
+    const v = validarTransferencia(data.monto, cuenta?.saldo ?? 0, data.cuentaDestinoId, cuentaId);
+    if (!v.valido) {
+      mostrarAlerta('error', v.mensaje);
+      setLoadingOperacion(false);
+      return;
+    }
     try {
       await api.post('/cuenta/transferencia', {
         cuentaOrigenId: cuentaId,
         cuentaDestinoId: data.cuentaDestinoId,
-        monto: data.monto
+        monto: v.monto
       });
       mostrarAlerta('exito', 'Transferencia realizada correctamente');
       await recargarCuenta();

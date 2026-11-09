@@ -10,12 +10,6 @@ export const Navbar = ({ cuentas, cuentaActivaId, onCambiarCuenta }) => {
             <span className="text-[#00FF00] text-xs uppercase">v1.0</span>
           </div>
 
-          <div className="hidden md:flex items-center gap-6 text-[#A1A1AA] text-sm">
-            <a href="#productos" className="hover:text-[#00FF00]">CUENTAS</a>
-            <a href="#historial" className="hover:text-[#00FF00]">HISTORIAL</a>
-            <a href="#contacto" className="hover:text-[#00FF00]">CONTACTO</a>
-          </div>
-
           <div className="flex items-center gap-3">
             <select
               value={cuentaActivaId}

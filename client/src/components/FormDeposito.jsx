@@ -10,20 +10,26 @@ export const FormDeposito = ({ onSubmit, loading }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-neutral-900 border-2 border-neutral-700 p-5 space-y-4">
-      <h3 className="text-lg font-bold text-white uppercase">DEPÓSITO</h3>
-      <label className="text-green-500">Monto:</label>
-      <input
-        type="number"
-        value={monto}
-        onChange={(e) => setMonto(e.target.value)}
-        className="bg-black border-2 border-green-500 text-green-500 px-3 py-2 w-full focus:outline-none focus:bg-green-500 focus:text-black font-mono"
-        required
-      />
+    <form onSubmit={handleSubmit} className="bg-[#222222] border-2 border-[#333333] p-6 space-y-5">
+      <div className="flex items-center gap-2">
+        <span className="bg-[#00FF00] text-[#000000] px-2 py-1 text-[10px] font-bold uppercase">DEPÓSITO</span>
+        <h3 className="text-lg font-bold text-[#FFFFFF] uppercase">Ingresar fondos</h3>
+      </div>
+      <label className="block text-[#A1A1AA] text-xs uppercase">Monto a depositar</label>
+      <div className="relative">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#00FF00]">$</span>
+        <input
+          type="number"
+          value={monto}
+          onChange={(e) => setMonto(e.target.value)}
+          className="bg-[#000000] border-2 border-[#00FF00] text-[#00FF00] px-10 py-3 w-full font-mono focus:outline-none focus:bg-[#00FF00] focus:text-[#000000]"
+          required
+        />
+      </div>
       <button
         type="submit"
         disabled={loading}
-        className="bg-green-500 text-black font-bold uppercase py-2 px-4 border-2 border-green-500 hover:bg-black hover:text-green-500 w-full"
+        className="bg-[#00FF00] text-[#000000] font-bold uppercase py-3 px-6 border-2 border-[#00FF00] hover:bg-[#000000] hover:text-[#00FF00] w-full"
       >
         {loading ? 'PROCESANDO...' : 'DEPOSITAR'}
       </button>

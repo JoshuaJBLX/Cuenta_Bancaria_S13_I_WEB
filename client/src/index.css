@@ -3,7 +3,19 @@
 @tailwind utilities;
 
 body {
-  @apply bg-black text-[#00FF00] font-mono;
+  @apply bg-[#000000] text-[#00FF00] font-mono;
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-[#000000];
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-[#00FF00] border-2 border-[#000000];
 }

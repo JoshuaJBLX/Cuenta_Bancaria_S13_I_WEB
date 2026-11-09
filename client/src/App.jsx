@@ -206,59 +206,59 @@ const App = () => {
 
       <div className="relative z-10 max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12">
         <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <SaldoCard cuenta={cuenta} loading={loadingCuenta} />
+          <div className="lg:col-span-2 space-y-6">
+            <SaldoCard cuenta={cuenta} loading={loadingCuenta} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormDeposito onSubmit={handleDeposito} loading={loadingOperacion} />
-            <FormRetiro
-              onSubmit={handleRetiro}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormDeposito onSubmit={handleDeposito} loading={loadingOperacion} />
+              <FormRetiro
+                onSubmit={handleRetiro}
+                loading={loadingOperacion}
+                saldoDisponible={cuenta?.saldo}
+              />
+            </div>
+
+            <FormTransferencia
+              onSubmit={handleTransferencia}
               loading={loadingOperacion}
-              saldoDisponible={cuenta?.saldo}
+              cuentasDisponibles={cuentas}
+              cuentaOrigenId={cuentaId}
+            />
+
+            <HistorialTransacciones
+              transacciones={transacciones}
+              loading={loadingCuenta}
             />
           </div>
 
-          <FormTransferencia
-            onSubmit={handleTransferencia}
-            loading={loadingOperacion}
-            cuentasDisponibles={cuentas}
-            cuentaOrigenId={cuentaId}
-          />
-
-          <HistorialTransacciones
-            transacciones={transacciones}
-            loading={loadingCuenta}
-          />
-        </div>
-
-        <aside className="space-y-6">
-          <div className="bg-[#222222] border-2 border-[#333333] p-6">
-            <h3 className="text-lg font-bold text-[#FFFFFF] uppercase mb-4">CUENTA ACTIVA</h3>
-            {cuenta ? (
-              <div className="space-y-3">
-                <div className="flex justify-between items-baseline mb-1">
-                  <p className="text-[#A1A1AA] text-xs uppercase">Titular</p>
-                  <p className="text-[#FFFFFF] font-bold">{cuenta.titular}</p>
+          <aside className="space-y-6">
+            <div className="bg-[#222222] border-2 border-[#333333] p-6">
+              <h3 className="text-lg font-bold text-[#FFFFFF] uppercase mb-4">CUENTA ACTIVA</h3>
+              {cuenta ? (
+                <div className="space-y-3">
+                  <div className="flex justify-between items-baseline mb-1">
+                    <p className="text-[#A1A1AA] text-xs uppercase">Titular</p>
+                    <p className="text-[#FFFFFF] font-bold">{cuenta.titular}</p>
+                  </div>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <p className="text-[#A1A1AA] text-xs uppercase">Número</p>
+                    <p className="text-[#00FF00] font-bold">{cuenta.numeroCuenta}</p>
+                  </div>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <p className="text-[#A1A1AA] text-xs uppercase">Moneda</p>
+                    <p className="text-[#00FF00] font-bold">{cuenta.moneda}</p>
+                  </div>
+                  <div className="pt-3 border-t-2 border-[#333333]">
+                    <p className="text-[#A1A1AA] text-xs uppercase">Saldo actual</p>
+                    <p className="text-4xl font-bold text-[#00FF00]">${cuenta.saldo.toLocaleString()}</p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-baseline mb-1">
-                  <p className="text-[#A1A1AA] text-xs uppercase">Número</p>
-                  <p className="text-[#00FF00] font-bold">{cuenta.numeroCuenta}</p>
-                </div>
-                <div className="flex justify-between items-baseline mb-1">
-                  <p className="text-[#A1A1AA] text-xs uppercase">Moneda</p>
-                  <p className="text-[#00FF00] font-bold">{cuenta.moneda}</p>
-                </div>
-                <div className="pt-3 border-t-2 border-[#333333]">
-                  <p className="text-[#A1A1AA] text-xs uppercase">Saldo actual</p>
-                  <p className="text-4xl font-bold text-[#00FF00]">${cuenta.saldo.toLocaleString()}</p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-[#00FF00] text-xs uppercase">Seleccioná una cuenta</p>
-            )}
-          </div>
-        </aside>
-      </main>
+              ) : (
+                <p className="text-[#00FF00] text-xs uppercase">Seleccioná una cuenta</p>
+              )}
+            </div>
+          </aside>
+        </main>
       </div>
 
       <footer className="text-[#666666] text-xs border-t-2 border-[#333333] pt-4 mt-12">
